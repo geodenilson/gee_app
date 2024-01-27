@@ -12,8 +12,11 @@ from datetime import datetime
 import json
 import os
 
-# Inicializar o mapa
-m = geemap.Map(heigth=800)
+
+@st.cache_data
+def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
+    geemap.ee_initialize(token_name=token_name)
+
 # Configuração da página
 st.set_page_config(layout="wide")
 st.title('Aplicativo para seleção de imagens, cálculo de índices e download das imagens')
@@ -44,8 +47,7 @@ if uploaded_file is not None:
     # Carrega a FeatureCollection no Earth Engine
     roi = ee.FeatureCollection(f_json)
 
-# Inicializar o mapa
-m = geemap.Map(heigth=800)
+
 point = ee.Geometry.Point(-45.259679, -17.871838)
 m.centerObject(point,8)
 m.setOptions("HYBRID")
@@ -123,8 +125,6 @@ if roi is not None:
     show_evi = st.sidebar.checkbox("EVI", value=False)
 
     # Adicionar a ROI e a imagem ao mapa
-    # Inicializar o mapa
-    m = geemap.Map(heigth=800)
     m.centerObject(roi, 13)
     m.addLayer(roi, {}, 'Região de Interesse')
     m.addLayer(selected_collection, {'bands':['B12', 'B8', 'B4'], 'min':0.1, 'max':0.4},str(f'Img {selected_dates}'))
