@@ -12,11 +12,6 @@ from datetime import datetime
 import json
 import os
 
-
-@st.cache_data
-def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
-    geemap.ee_initialize(token_name=token_name)
-
 # Configuração da página
 st.set_page_config(layout="wide")
 st.title('Aplicativo para seleção de imagens, cálculo de índices e download das imagens')
