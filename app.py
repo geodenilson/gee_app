@@ -1,9 +1,9 @@
-import ee
-import geemap
-import geemap.foliumap as geemap
 import streamlit as st
 import streamlit_folium
 from streamlit_folium import st_folium
+import geemap
+import geemap.foliumap as geemap
+import ee
 import plotly.express as px
 import folium
 import pandas as pd
@@ -11,11 +11,9 @@ import geopandas as gpd
 from datetime import datetime
 import json
 import os
+import pathlib
 
 
-@st.cache_data
-def ee_authenticate(token_name="EARTHENGINE_TOKEN"):
-    geemap.ee_initialize(token_name=token_name)
 
 # Configuração da página
 st.set_page_config(layout="wide")
