@@ -52,10 +52,10 @@ m.centerObject(point,8)
 m.setOptions("HYBRID")
 
  # Adicionar campos de datas iniciais e finais na barra lateral
-start_date = st.sidebar.date_input("Selecione a data inicial", datetime(2024, 1, 1))
+start_date = st.sidebar.date_input("Selecione a data inicial", datetime(2023, 1, 1))
 end_date = st.sidebar.date_input("Selecione a data final", datetime.now())
 # Adicionar slider para definir o limite de nuvens
-cloud_percentage_limit = st.sidebar.slider("Limite de percentual de nuvens", 0, 100, 15)
+cloud_percentage_limit = st.sidebar.slider("Limite de percentual de nuvens", 0, 100, 5)
 
 # Adiciona a ROI se ela existir
 if roi is not None:
