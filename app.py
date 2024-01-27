@@ -12,6 +12,9 @@ from datetime import datetime
 import json
 import os
 
+
+# Inicializar o mapa
+m = geemap.Map(heigth=800)
 # Configuração da página
 st.set_page_config(layout="wide")
 st.title('Aplicativo para seleção de imagens, cálculo de índices e download das imagens')
@@ -19,8 +22,7 @@ st.markdown(""" #### O APP foi desenvolvido para que o usuário possa carregar a
                
 #### Para criar o arquivo **GeoJSON** use o site [geojson.io](https://geojson.io/#new&map=2/0/20).""")
 
-# Inicializar o mapa
-m = geemap.Map(heigth=800)
+
 # Inicializar o mapa com ROI como None
 roi = None
 
@@ -121,8 +123,6 @@ if roi is not None:
     show_evi = st.sidebar.checkbox("EVI", value=False)
 
     # Adicionar a ROI e a imagem ao mapa
-    # Inicializar o mapa
-    m = geemap.Map(heigth=800)
     m.centerObject(roi, 13)
     m.addLayer(roi, {}, 'Região de Interesse')
     m.addLayer(selected_collection, {'bands':['B12', 'B8', 'B4'], 'min':0.1, 'max':0.4},str(f'Img {selected_dates}'))
