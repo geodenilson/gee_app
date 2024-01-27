@@ -24,7 +24,8 @@ st.markdown(""" #### O APP foi desenvolvido para que o usuário possa carregar a
                
 #### Para criar o arquivo **GeoJSON** use o site [geojson.io](https://geojson.io/#new&map=2/0/20).""")
 
-
+# Inicializar o mapa
+m = geemap.Map(heigth=800)
 # Inicializar o mapa com ROI como None
 roi = None
 
@@ -47,8 +48,7 @@ if uploaded_file is not None:
     # Carrega a FeatureCollection no Earth Engine
     roi = ee.FeatureCollection(f_json)
 
-# Inicializar o mapa
-m = geemap.Map(heigth=800)
+
 point = ee.Geometry.Point(-45.259679, -17.871838)
 m.centerObject(point,8)
 m.setOptions("HYBRID")
