@@ -25,6 +25,7 @@ st.markdown(""" #### O APP foi desenvolvido para que o usuário possa carregar a
 
 # Inicializar o mapa com ROI como None
 roi = None
+m = geemap.Map(height=800)
 
 # Upload do arquivo GeoJSON
 st.sidebar.subheader("Carregue o Arquivo Geojson:")
