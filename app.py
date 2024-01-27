@@ -4,13 +4,13 @@ import geemap.foliumap as geemap
 import streamlit as st
 import streamlit_folium
 from streamlit_folium import st_folium
-import plotly.express as px 
+import plotly.express as px
 import folium
 import pandas as pd
 import geopandas as gpd
 from datetime import datetime
-from pathlib import Path
 import json
+import os
 
 
 @st.cache_data
@@ -23,6 +23,7 @@ st.title('Aplicativo para seleção de imagens, cálculo de índices e download 
 st.markdown(""" #### O APP foi desenvolvido para que o usuário possa carregar a região de interesse, definir o período e visualizar o NDVI, EVI e NDRE. A aplicação processa Datasets disponíveis no Google Earth Engine.
                
 #### Para criar o arquivo **GeoJSON** use o site [geojson.io](https://geojson.io/#new&map=2/0/20).""")
+
 
 # Inicializar o mapa com ROI como None
 roi = None
@@ -46,7 +47,7 @@ if uploaded_file is not None:
     # Carrega a FeatureCollection no Earth Engine
     roi = ee.FeatureCollection(f_json)
 
-# Cria o mapa
+# Inicializar o mapa
 m = geemap.Map(heigth=800)
 point = ee.Geometry.Point(-45.259679, -17.871838)
 m.centerObject(point,8)
@@ -60,9 +61,7 @@ cloud_percentage_limit = st.sidebar.slider("Limite de percentual de nuvens", 0, 
 
 # Adiciona a ROI se ela existir
 if roi is not None:
-    
-       
-     # Função de nuvens, fator de escala e clip
+   # Função de nuvens, fator de escala e clip
     def maskCloudAndShadowsSR(image):
         cloudProb = image.select('MSK_CLDPRB');
         snowProb = image.select('MSK_SNWPRB');
@@ -127,19 +126,17 @@ if roi is not None:
     show_evi = st.sidebar.checkbox("EVI", value=False)
 
     # Adicionar a ROI e a imagem ao mapa
-    m = geemap.Map(heigth=800)
     m.centerObject(roi, 13)
-    m.setOptions("HYBRID")
     m.addLayer(roi, {}, 'Região de Interesse')
     m.addLayer(selected_collection, {'bands':['B12', 'B8', 'B4'], 'min':0.1, 'max':0.4},str(f'Img {selected_dates}'))
     
     # Adicionar camadas de acordo com as escolhas
     if show_ndvi:
-        m.addLayer(selected_collection.select('ndvi'), {'min': -1, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'NDVI')
+        m.addLayer(selected_collection.select('ndvi'), {'min': -0, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'NDVI')
     if show_ndre:
-        m.addLayer(selected_collection.select('ndre'), {'min': -1, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'NDRE')
+        m.addLayer(selected_collection.select('ndre'), {'min': -0, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'NDRE')
     if show_evi:
-        m.addLayer(selected_collection.select('evi'), {'min': -1, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'EVI')
+        m.addLayer(selected_collection.select('evi'), {'min': -0, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'EVI')
         
     st.divider()
     # Função para aplicar a redução por regiões para toda a coleção usando map
@@ -190,8 +187,6 @@ if roi is not None:
         # Você pode usar a biblioteca geemap para exportar a imagem
 
      # Por exemplo:
-        import os
-        # Por exemplo:
         out_dir = os.path.join(os.path.expanduser('~'), 'Downloads')
 
         # Exportar a imagem B1-B8
